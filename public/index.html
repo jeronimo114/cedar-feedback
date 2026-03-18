@@ -339,6 +339,46 @@
     }
     .btn-reset:hover { border-color: var(--accent); }
 
+    /* Missing info warning */
+    .missing-banner {
+      background: rgba(251, 191, 36, 0.1);
+      border: 1px solid rgba(251, 191, 36, 0.35);
+      border-radius: 10px;
+      padding: 0.85rem 1rem;
+      margin-bottom: 0.75rem;
+      opacity: 0;
+      animation: fadeUp 0.35s ease forwards;
+    }
+    .missing-banner h4 {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--amber);
+      margin-bottom: 0.4rem;
+    }
+    .missing-banner ul {
+      list-style: none;
+      padding: 0;
+    }
+    .missing-banner ul li {
+      font-size: 0.82rem;
+      color: #e0c870;
+      padding: 0.15rem 0;
+      padding-left: 1rem;
+      position: relative;
+    }
+    .missing-banner ul li::before {
+      content: '•';
+      position: absolute;
+      left: 0;
+      color: var(--amber);
+    }
+    .missing-banner p {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 0.4rem;
+      font-style: italic;
+    }
+
     .hidden { display: none !important; }
   </style>
 </head>
@@ -394,6 +434,7 @@ let employeeName = '';
 let situationText = '';
 let cedarSteps = {};
 let finalMessage = '';
+let missingInfo = [];
 let currentPhaseIdx = -1;
 let waitingForInput = false;
 
@@ -438,10 +479,25 @@ async function startSession() {
     const data = await resp.json();
     cedarSteps = data.steps || {};
     finalMessage = data.finalMessage || '';
+    missingInfo = data.missingInfo || [];
 
     // Switch views
     document.getElementById('setupView').classList.add('hidden');
     document.getElementById('chatView').classList.remove('hidden');
+
+    // Show missing info warning if applicable
+    if (missingInfo.length > 0) {
+      const chat = document.getElementById('chatArea');
+      const banner = document.createElement('div');
+      banner.className = 'missing-banner';
+      let items = missingInfo.map(i => `<li>${esc(i)}</li>`).join('');
+      banner.innerHTML = `
+        <h4>&#9888; Información faltante detectada</h4>
+        <ul>${items}</ul>
+        <p>El feedback se generó con la información disponible. Para mayor precisión, considera reiniciar con más detalles.</p>
+      `;
+      chat.appendChild(banner);
+    }
 
     // Start first phase
     currentPhaseIdx = -1;
@@ -622,6 +678,7 @@ function resetAll() {
   currentPhaseIdx = -1;
   cedarSteps = {};
   finalMessage = '';
+  missingInfo = [];
   waitingForInput = false;
   document.querySelectorAll('.phase-chip').forEach(c => c.classList.remove('active', 'done'));
 }
