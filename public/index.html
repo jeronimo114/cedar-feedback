@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CEDAR Feedback – BPO Global Services</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #242837;
+      --border: #2e3348;
+      --text: #e4e6f0;
+      --text-muted: #8b90a5;
+      --accent: #6c63ff;
+      --accent-glow: rgba(108, 99, 255, 0.25);
+      --green: #34d399;
+      --amber: #fbbf24;
+      --radius: 12px;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    /* Layout */
+    .app {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+    .header h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.25rem;
+    }
+    .header h1 span { color: var(--accent); }
+    .header p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    /* Card */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Form */
+    .form-group { margin-bottom: 1.25rem; }
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.95rem;
+      padding: 0.75rem 1rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+    .form-group textarea {
+      min-height: 150px;
+      resize: vertical;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 0.75rem 1.75rem;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.1s;
+      width: 100%;
+      justify-content: center;
+    }
+    .btn:hover { opacity: 0.9; }
+    .btn:active { transform: scale(0.98); }
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Steps Progress */
+    .steps-bar {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .step-indicator {
+      flex: 1;
+      text-align: center;
+      padding: 0.6rem 0.25rem;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      transition: all 0.4s ease;
+    }
+    .step-indicator.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+      box-shadow: 0 0 12px var(--accent-glow);
+    }
+    .step-indicator.done {
+      background: rgba(52, 211, 153, 0.15);
+      border-color: var(--green);
+      color: var(--green);
+    }
+
+    /* CEDAR Step Cards */
+    .cedar-step {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      opacity: 0;
+      transform: translateY(12px);
+      animation: fadeUp 0.4s ease forwards;
+    }
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .cedar-step .step-label {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 0.25rem 0.65rem;
+      border-radius: 6px;
+      margin-bottom: 0.75rem;
+    }
+    .cedar-step.step-c .step-label { background: rgba(108,99,255,0.2); color: #a5a0ff; }
+    .cedar-step.step-e .step-label { background: rgba(59,130,246,0.2); color: #93bbfd; }
+    .cedar-step.step-d .step-label { background: rgba(251,191,36,0.2); color: #fcd563; }
+    .cedar-step.step-a .step-label { background: rgba(249,115,22,0.2); color: #fdba74; }
+    .cedar-step.step-r .step-label { background: rgba(52,211,153,0.2); color: #6ee7b7; }
+
+    .cedar-step .step-content {
+      font-size: 0.95rem;
+      line-height: 1.7;
+      color: var(--text);
+      white-space: pre-wrap;
+    }
+
+    /* Final message */
+    .final-card {
+      background: linear-gradient(135deg, rgba(108,99,255,0.08), rgba(52,211,153,0.08));
+      border: 1px solid var(--accent);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-top: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.5s ease 0.2s forwards;
+    }
+    .final-card h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: var(--accent);
+    }
+    .final-card .final-text {
+      font-size: 0.95rem;
+      line-height: 1.8;
+      white-space: pre-wrap;
+    }
+    .copy-btn {
+      margin-top: 1rem;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .copy-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* Loading spinner */
+    .spinner {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Hidden */
+    .hidden { display: none !important; }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .app { padding: 1.25rem 1rem; }
+      .card { padding: 1.25rem; }
+      .steps-bar { flex-wrap: wrap; }
+      .step-indicator { flex: none; width: calc(33% - 0.35rem); }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- Header -->
+    <div class="header">
+      <h1><span>CEDAR</span> Feedback Agent</h1>
+      <p>BPO Global Services – Retroalimentación estructurada para tu equipo</p>
+    </div>
+
+    <!-- Input Form -->
+    <div class="card" id="formCard">
+      <div class="form-group">
+        <label>Nombre del colaborador</label>
+        <input type="text" id="employeeName" placeholder="Ej. Juan Pérez" />
+      </div>
+      <div class="form-group">
+        <label>Contexto de la situación</label>
+        <textarea id="situation" placeholder="Describe la situación observada. Incluye: tipo de evento (llamada, puntualidad, actitud, etc.), qué ocurrió, impacto observado, si es un evento puntual o recurrente..."></textarea>
+      </div>
+      <button class="btn" id="generateBtn" onclick="generateFeedback()">
+        <span id="btnText">Generar Feedback CEDAR</span>
+        <span id="btnSpinner" class="spinner hidden"></span>
+      </button>
+    </div>
+
+    <!-- Steps Progress Bar -->
+    <div class="steps-bar hidden" id="stepsBar">
+      <div class="step-indicator" id="ind-c">C – Contexto</div>
+      <div class="step-indicator" id="ind-e">E – Ejemplo</div>
+      <div class="step-indicator" id="ind-d">D – Descripción</div>
+      <div class="step-indicator" id="ind-a">A – Alternativa</div>
+      <div class="step-indicator" id="ind-r">R – Resultado</div>
+    </div>
+
+    <!-- CEDAR Steps Output -->
+    <div id="cedarOutput"></div>
+
+    <!-- Final Combined Message -->
+    <div id="finalOutput"></div>
+
+    <!-- Reset -->
+    <button class="btn hidden" id="resetBtn" onclick="resetForm()" style="margin-top:1rem; background: var(--surface2); border: 1px solid var(--border);">
+      Nueva retroalimentación
+    </button>
+  </div>
+
+  <script>
+    const STEP_META = [
+      { key: 'c', label: 'Contexto', className: 'step-c' },
+      { key: 'e', label: 'Ejemplo', className: 'step-e' },
+      { key: 'd', label: 'Descripción', className: 'step-d' },
+      { key: 'a', label: 'Alternativa', className: 'step-a' },
+      { key: 'r', label: 'Resultado', className: 'step-r' },
+    ];
+
+    async function generateFeedback() {
+      const name = document.getElementById('employeeName').value.trim();
+      const situation = document.getElementById('situation').value.trim();
+
+      if (!name) return alert('Por favor ingresa el nombre del colaborador.');
+      if (!situation) return alert('Por favor describe la situación.');
+
+      // UI: disable form, show progress bar
+      const btn = document.getElementById('generateBtn');
+      const btnText = document.getElementById('btnText');
+      const btnSpinner = document.getElementById('btnSpinner');
+      btn.disabled = true;
+      btnText.textContent = 'Generando...';
+      btnSpinner.classList.remove('hidden');
+
+      document.getElementById('stepsBar').classList.remove('hidden');
+      document.getElementById('cedarOutput').innerHTML = '';
+      document.getElementById('finalOutput').innerHTML = '';
+      document.getElementById('resetBtn').classList.add('hidden');
+
+      // Reset indicators
+      STEP_META.forEach(s => {
+        document.getElementById('ind-' + s.key).className = 'step-indicator';
+      });
+
+      try {
+        const response = await fetch('/api/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, situation }),
+        });
+
+        if (!response.ok) {
+          const errData = await response.json().catch(() => ({}));
+          throw new Error(errData.error || 'Error del servidor');
+        }
+
+        const data = await response.json();
+        const steps = data.steps; // { c, e, d, a, r }
+        const finalMessage = data.finalMessage;
+
+        // Reveal steps one by one with delay
+        for (let i = 0; i < STEP_META.length; i++) {
+          const meta = STEP_META[i];
+          const content = steps[meta.key] || '';
+
+          // Mark indicator active
+          document.getElementById('ind-' + meta.key).classList.add('active');
+
+          // Create step card
+          const card = document.createElement('div');
+          card.className = `cedar-step ${meta.className}`;
+          card.innerHTML = `
+            <div class="step-label">${meta.label}</div>
+            <div class="step-content">${escapeHtml(content)}</div>
+          `;
+          document.getElementById('cedarOutput').appendChild(card);
+
+          // Wait for visual effect
+          await delay(600);
+
+          // Mark indicator done
+          document.getElementById('ind-' + meta.key).classList.remove('active');
+          document.getElementById('ind-' + meta.key).classList.add('done');
+        }
+
+        // Show final combined message
+        await delay(400);
+        const finalDiv = document.createElement('div');
+        finalDiv.className = 'final-card';
+        finalDiv.innerHTML = `
+          <h3>📋 Mensaje final para ${escapeHtml(name)}</h3>
+          <div class="final-text">${escapeHtml(finalMessage)}</div>
+          <button class="copy-btn" onclick="copyFinal()">📄 Copiar al portapapeles</button>
+        `;
+        document.getElementById('finalOutput').appendChild(finalDiv);
+
+        document.getElementById('resetBtn').classList.remove('hidden');
+
+      } catch (err) {
+        alert('Error: ' + err.message);
+      } finally {
+        btn.disabled = false;
+        btnText.textContent = 'Generar Feedback CEDAR';
+        btnSpinner.classList.add('hidden');
+      }
+    }
+
+    function copyFinal() {
+      const text = document.querySelector('.final-text')?.textContent || '';
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = document.querySelector('.copy-btn');
+        btn.textContent = '✅ Copiado';
+        setTimeout(() => { btn.textContent = '📄 Copiar al portapapeles'; }, 2000);
+      });
+    }
+
+    function resetForm() {
+      document.getElementById('employeeName').value = '';
+      document.getElementById('situation').value = '';
+      document.getElementById('stepsBar').classList.add('hidden');
+      document.getElementById('cedarOutput').innerHTML = '';
+      document.getElementById('finalOutput').innerHTML = '';
+      document.getElementById('resetBtn').classList.add('hidden');
+      STEP_META.forEach(s => {
+        document.getElementById('ind-' + s.key).className = 'step-indicator';
+      });
+    }
+
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    function delay(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+  </script>
+</body>
+</html>
