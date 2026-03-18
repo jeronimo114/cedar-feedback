@@ -32,49 +32,203 @@
       line-height: 1.6;
     }
 
-    /* Layout */
     .app {
-      max-width: 900px;
+      max-width: 720px;
       margin: 0 auto;
-      padding: 2rem 1.5rem 4rem;
+      padding: 1.5rem 1rem 0;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
     }
 
     /* Header */
     .header {
       text-align: center;
-      margin-bottom: 2.5rem;
+      padding: 0.75rem 0 1rem;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
     }
-    .header h1 {
-      font-size: 1.75rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      margin-bottom: 0.25rem;
-    }
+    .header h1 { font-size: 1.35rem; font-weight: 700; letter-spacing: -0.02em; }
     .header h1 span { color: var(--accent); }
-    .header p {
+    .header p { color: var(--text-muted); font-size: 0.82rem; margin-top: 0.15rem; }
+
+    /* Phases bar */
+    .phases {
+      display: flex;
+      gap: 0.35rem;
+      padding: 0.75rem 0;
+      flex-shrink: 0;
+    }
+    .phase-chip {
+      flex: 1;
+      text-align: center;
+      padding: 0.4rem 0.2rem;
+      border-radius: 8px;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      background: var(--surface2);
+      border: 1px solid var(--border);
       color: var(--text-muted);
-      font-size: 0.95rem;
+      transition: all 0.3s ease;
+    }
+    .phase-chip.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+      box-shadow: 0 0 10px var(--accent-glow);
+    }
+    .phase-chip.done {
+      background: rgba(52, 211, 153, 0.12);
+      border-color: var(--green);
+      color: var(--green);
     }
 
-    /* Card */
-    .card {
+    /* Chat area */
+    .chat-area {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0.75rem 0;
+    }
+    .chat-area::-webkit-scrollbar { width: 5px; }
+    .chat-area::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+    /* Messages */
+    .msg {
+      display: flex;
+      gap: 0.55rem;
+      margin-bottom: 0.85rem;
+      opacity: 0;
+      transform: translateY(8px);
+      animation: fadeUp 0.3s ease forwards;
+    }
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+    .msg.agent { flex-direction: row; }
+    .msg.employee { flex-direction: row-reverse; }
+
+    .msg-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .msg.agent .msg-avatar { background: var(--accent); color: #fff; }
+    .msg.employee .msg-avatar { background: var(--green); color: #0f1117; }
+
+    .msg-bubble {
+      max-width: 78%;
+      padding: 0.75rem 1rem;
+      border-radius: 14px;
+      font-size: 0.88rem;
+      line-height: 1.6;
+      white-space: pre-wrap;
+    }
+    .msg.agent .msg-bubble {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-top-left-radius: 4px;
+    }
+    .msg.employee .msg-bubble {
+      background: rgba(52, 211, 153, 0.1);
+      border: 1px solid rgba(52, 211, 153, 0.2);
+      border-top-right-radius: 4px;
+      text-align: right;
+    }
+
+    .msg-label {
+      display: inline-block;
+      font-size: 0.62rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 0.15rem 0.45rem;
+      border-radius: 4px;
+      margin-bottom: 0.4rem;
+    }
+    .label-c { background: rgba(108,99,255,0.2); color: #a5a0ff; }
+    .label-e { background: rgba(59,130,246,0.2); color: #93bbfd; }
+    .label-d { background: rgba(251,191,36,0.2); color: #fcd563; }
+    .label-a { background: rgba(249,115,22,0.2); color: #fdba74; }
+    .label-r { background: rgba(52,211,153,0.2); color: #6ee7b7; }
+
+    /* Input bar */
+    .input-bar {
+      border-top: 1px solid var(--border);
+      padding: 0.75rem 0 1rem;
+      flex-shrink: 0;
+    }
+    .input-row {
+      display: flex;
+      gap: 0.5rem;
+    }
+    .input-row textarea {
+      flex: 1;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.88rem;
+      padding: 0.65rem 0.9rem;
+      resize: none;
+      min-height: 42px;
+      max-height: 100px;
+      transition: border-color 0.2s;
+    }
+    .input-row textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px var(--accent-glow);
+    }
+    .send-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      border: none;
+      background: var(--accent);
+      color: #fff;
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: opacity 0.2s;
+    }
+    .send-btn:hover { opacity: 0.85; }
+    .send-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+    .input-hint {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-top: 0.35rem;
+      text-align: center;
+    }
+
+    /* Setup form */
+    .setup-card {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 1.75rem;
-      margin-bottom: 1.5rem;
+      padding: 1.5rem;
+      margin-top: 1rem;
     }
-
-    /* Form */
-    .form-group { margin-bottom: 1.25rem; }
+    .setup-card h2 { font-size: 1rem; font-weight: 600; margin-bottom: 1rem; }
+    .form-group { margin-bottom: 1rem; }
     .form-group label {
       display: block;
-      font-size: 0.85rem;
+      font-size: 0.78rem;
       font-weight: 600;
       color: var(--text-muted);
       text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 0.5rem;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.35rem;
     }
     .form-group input,
     .form-group textarea {
@@ -84,157 +238,56 @@
       border-radius: 8px;
       color: var(--text);
       font-family: inherit;
-      font-size: 0.95rem;
-      padding: 0.75rem 1rem;
-      transition: border-color 0.2s, box-shadow 0.2s;
+      font-size: 0.88rem;
+      padding: 0.6rem 0.85rem;
+      transition: border-color 0.2s;
     }
     .form-group input:focus,
     .form-group textarea:focus {
       outline: none;
       border-color: var(--accent);
-      box-shadow: 0 0 0 3px var(--accent-glow);
+      box-shadow: 0 0 0 2px var(--accent-glow);
     }
-    .form-group textarea {
-      min-height: 150px;
-      resize: vertical;
-    }
+    .form-group textarea { min-height: 110px; resize: vertical; }
 
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: var(--accent);
-      color: #fff;
+    .btn-primary {
+      width: 100%;
+      padding: 0.7rem;
       border: none;
       border-radius: 8px;
-      font-family: inherit;
-      font-size: 1rem;
-      font-weight: 600;
-      padding: 0.75rem 1.75rem;
-      cursor: pointer;
-      transition: opacity 0.2s, transform 0.1s;
-      width: 100%;
-      justify-content: center;
-    }
-    .btn:hover { opacity: 0.9; }
-    .btn:active { transform: scale(0.98); }
-    .btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-
-    /* Steps Progress */
-    .steps-bar {
-      display: flex;
-      gap: 0.5rem;
-      margin-bottom: 1.5rem;
-    }
-    .step-indicator {
-      flex: 1;
-      text-align: center;
-      padding: 0.6rem 0.25rem;
-      border-radius: 8px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      color: var(--text-muted);
-      transition: all 0.4s ease;
-    }
-    .step-indicator.active {
       background: var(--accent);
-      border-color: var(--accent);
       color: #fff;
-      box-shadow: 0 0 12px var(--accent-glow);
-    }
-    .step-indicator.done {
-      background: rgba(52, 211, 153, 0.15);
-      border-color: var(--green);
-      color: var(--green);
-    }
-
-    /* CEDAR Step Cards */
-    .cedar-step {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 1.5rem;
-      margin-bottom: 1rem;
-      opacity: 0;
-      transform: translateY(12px);
-      animation: fadeUp 0.4s ease forwards;
-    }
-    @keyframes fadeUp {
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .cedar-step .step-label {
-      display: inline-block;
-      font-size: 0.75rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      padding: 0.25rem 0.65rem;
-      border-radius: 6px;
-      margin-bottom: 0.75rem;
-    }
-    .cedar-step.step-c .step-label { background: rgba(108,99,255,0.2); color: #a5a0ff; }
-    .cedar-step.step-e .step-label { background: rgba(59,130,246,0.2); color: #93bbfd; }
-    .cedar-step.step-d .step-label { background: rgba(251,191,36,0.2); color: #fcd563; }
-    .cedar-step.step-a .step-label { background: rgba(249,115,22,0.2); color: #fdba74; }
-    .cedar-step.step-r .step-label { background: rgba(52,211,153,0.2); color: #6ee7b7; }
-
-    .cedar-step .step-content {
-      font-size: 0.95rem;
-      line-height: 1.7;
-      color: var(--text);
-      white-space: pre-wrap;
-    }
-
-    /* Final message */
-    .final-card {
-      background: linear-gradient(135deg, rgba(108,99,255,0.08), rgba(52,211,153,0.08));
-      border: 1px solid var(--accent);
-      border-radius: var(--radius);
-      padding: 1.75rem;
-      margin-top: 1.5rem;
-      opacity: 0;
-      animation: fadeUp 0.5s ease 0.2s forwards;
-    }
-    .final-card h3 {
-      font-size: 1rem;
-      font-weight: 700;
-      margin-bottom: 1rem;
-      color: var(--accent);
-    }
-    .final-card .final-text {
-      font-size: 0.95rem;
-      line-height: 1.8;
-      white-space: pre-wrap;
-    }
-    .copy-btn {
-      margin-top: 1rem;
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      color: var(--text);
-      border-radius: 8px;
       font-family: inherit;
-      font-size: 0.85rem;
-      font-weight: 500;
-      padding: 0.5rem 1rem;
+      font-size: 0.92rem;
+      font-weight: 600;
       cursor: pointer;
-      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
     }
-    .copy-btn:hover {
-      border-color: var(--accent);
-      color: var(--accent);
+    .btn-primary:hover { opacity: 0.9; }
+    .btn-primary:disabled { opacity: 0.45; cursor: not-allowed; }
+
+    /* Typing dots */
+    .typing { display: flex; gap: 4px; align-items: center; padding: 0.2rem 0; }
+    .typing span {
+      width: 6px; height: 6px;
+      background: var(--text-muted);
+      border-radius: 50%;
+      animation: bounce 1.2s infinite;
+    }
+    .typing span:nth-child(2) { animation-delay: 0.15s; }
+    .typing span:nth-child(3) { animation-delay: 0.3s; }
+    @keyframes bounce {
+      0%, 60%, 100% { transform: translateY(0); }
+      30% { transform: translateY(-5px); }
     }
 
-    /* Loading spinner */
+    /* Spinner */
     .spinner {
       display: inline-block;
-      width: 18px;
-      height: 18px;
+      width: 16px; height: 16px;
       border: 2px solid rgba(255,255,255,0.3);
       border-top-color: #fff;
       border-radius: 50%;
@@ -242,190 +295,349 @@
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* Hidden */
-    .hidden { display: none !important; }
-
-    /* Responsive */
-    @media (max-width: 600px) {
-      .app { padding: 1.25rem 1rem; }
-      .card { padding: 1.25rem; }
-      .steps-bar { flex-wrap: wrap; }
-      .step-indicator { flex: none; width: calc(33% - 0.35rem); }
+    /* Final card */
+    .final-card-wrapper {
+      margin: 0.5rem 0;
+      opacity: 0;
+      transform: translateY(8px);
+      animation: fadeUp 0.4s ease forwards;
     }
+    .final-card {
+      background: linear-gradient(135deg, rgba(108,99,255,0.08), rgba(52,211,153,0.08));
+      border: 1px solid var(--accent);
+      border-radius: var(--radius);
+      padding: 1.15rem;
+    }
+    .final-card h3 { font-size: 0.88rem; font-weight: 700; color: var(--accent); margin-bottom: 0.65rem; }
+    .final-card .final-text { font-size: 0.86rem; line-height: 1.7; white-space: pre-wrap; }
+    .copy-btn {
+      margin-top: 0.65rem;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 0.78rem;
+      font-weight: 500;
+      padding: 0.35rem 0.75rem;
+      cursor: pointer;
+    }
+    .copy-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    .btn-reset {
+      width: 100%;
+      margin-top: 0.75rem;
+      padding: 0.6rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface2);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    .btn-reset:hover { border-color: var(--accent); }
+
+    .hidden { display: none !important; }
   </style>
 </head>
 <body>
   <div class="app">
-    <!-- Header -->
     <div class="header">
       <h1><span>CEDAR</span> Feedback Agent</h1>
-      <p>BPO Global Services – Retroalimentación estructurada para tu equipo</p>
+      <p>BPO Global Services – Retroalimentación interactiva paso a paso</p>
     </div>
 
-    <!-- Input Form -->
-    <div class="card" id="formCard">
-      <div class="form-group">
-        <label>Nombre del colaborador</label>
-        <input type="text" id="employeeName" placeholder="Ej. Juan Pérez" />
+    <!-- SETUP VIEW -->
+    <div id="setupView" style="flex:1; display:flex; align-items:flex-start; justify-content:center;">
+      <div class="setup-card">
+        <h2>Iniciar sesión de feedback</h2>
+        <div class="form-group">
+          <label>Nombre del colaborador</label>
+          <input type="text" id="employeeName" placeholder="Ej. Juan Pérez" />
+        </div>
+        <div class="form-group">
+          <label>Contexto de la situación</label>
+          <textarea id="situation" placeholder="Describe la situación observada: tipo de evento, qué ocurrió, impacto, frecuencia..."></textarea>
+        </div>
+        <button class="btn-primary" id="startBtn" onclick="startSession()">
+          <span id="startText">Iniciar sesión CEDAR</span>
+          <span id="startSpinner" class="spinner hidden"></span>
+        </button>
       </div>
-      <div class="form-group">
-        <label>Contexto de la situación</label>
-        <textarea id="situation" placeholder="Describe la situación observada. Incluye: tipo de evento (llamada, puntualidad, actitud, etc.), qué ocurrió, impacto observado, si es un evento puntual o recurrente..."></textarea>
+    </div>
+
+    <!-- CHAT VIEW -->
+    <div id="chatView" class="hidden">
+      <div class="phases" id="phasesBar">
+        <div class="phase-chip" data-phase="c">Contexto</div>
+        <div class="phase-chip" data-phase="e">Ejemplo</div>
+        <div class="phase-chip" data-phase="d">Descripción</div>
+        <div class="phase-chip" data-phase="a">Alternativa</div>
+        <div class="phase-chip" data-phase="r">Resultado</div>
       </div>
-      <button class="btn" id="generateBtn" onclick="generateFeedback()">
-        <span id="btnText">Generar Feedback CEDAR</span>
-        <span id="btnSpinner" class="spinner hidden"></span>
-      </button>
+      <div class="chat-area" id="chatArea"></div>
+      <div class="input-bar" id="inputBar">
+        <div class="input-row">
+          <textarea id="userInput" rows="1" placeholder="Escribe tu respuesta..." onkeydown="handleKey(event)"></textarea>
+          <button class="send-btn" id="sendBtn" onclick="sendResponse()" disabled>&#10148;</button>
+        </div>
+        <div class="input-hint" id="inputHint"></div>
+      </div>
     </div>
-
-    <!-- Steps Progress Bar -->
-    <div class="steps-bar hidden" id="stepsBar">
-      <div class="step-indicator" id="ind-c">C – Contexto</div>
-      <div class="step-indicator" id="ind-e">E – Ejemplo</div>
-      <div class="step-indicator" id="ind-d">D – Descripción</div>
-      <div class="step-indicator" id="ind-a">A – Alternativa</div>
-      <div class="step-indicator" id="ind-r">R – Resultado</div>
-    </div>
-
-    <!-- CEDAR Steps Output -->
-    <div id="cedarOutput"></div>
-
-    <!-- Final Combined Message -->
-    <div id="finalOutput"></div>
-
-    <!-- Reset -->
-    <button class="btn hidden" id="resetBtn" onclick="resetForm()" style="margin-top:1rem; background: var(--surface2); border: 1px solid var(--border);">
-      Nueva retroalimentación
-    </button>
   </div>
 
-  <script>
-    const STEP_META = [
-      { key: 'c', label: 'Contexto', className: 'step-c' },
-      { key: 'e', label: 'Ejemplo', className: 'step-e' },
-      { key: 'd', label: 'Descripción', className: 'step-d' },
-      { key: 'a', label: 'Alternativa', className: 'step-a' },
-      { key: 'r', label: 'Resultado', className: 'step-r' },
-    ];
+<script>
+// ===================== STATE =====================
+let employeeName = '';
+let situationText = '';
+let cedarSteps = {};
+let finalMessage = '';
+let currentPhaseIdx = -1;
+let waitingForInput = false;
 
-    async function generateFeedback() {
-      const name = document.getElementById('employeeName').value.trim();
-      const situation = document.getElementById('situation').value.trim();
+const PHASES = [
+  { key: 'c', label: 'Contexto', css: 'label-c',
+    intro: (n) => `${n}, quiero tomar un momento para conversar contigo sobre algo que observé recientemente en la operación.` },
+  { key: 'e', label: 'Ejemplo', css: 'label-e',
+    intro: (n) => `Gracias por tu comentario, ${n}. Ahora quiero compartirte los hechos específicos que observé.` },
+  { key: 'd', label: 'Descripción', css: 'label-d',
+    intro: (n) => `Aprecio tu perspectiva. Ahora quiero que hablemos sobre el impacto que esto genera.` },
+  { key: 'a', label: 'Alternativa', css: 'label-a',
+    intro: (n) => `Entiendo tu punto. Ahora me gustaría que exploremos juntos algunas alternativas.` },
+  { key: 'r', label: 'Resultado', css: 'label-r',
+    intro: (n) => `Muy bien. Para cerrar, vamos a definir lo que esperamos hacia adelante y cómo daremos seguimiento.` },
+];
 
-      if (!name) return alert('Por favor ingresa el nombre del colaborador.');
-      if (!situation) return alert('Por favor describe la situación.');
+// ===================== START =====================
+async function startSession() {
+  employeeName = document.getElementById('employeeName').value.trim();
+  situationText = document.getElementById('situation').value.trim();
 
-      // UI: disable form, show progress bar
-      const btn = document.getElementById('generateBtn');
-      const btnText = document.getElementById('btnText');
-      const btnSpinner = document.getElementById('btnSpinner');
-      btn.disabled = true;
-      btnText.textContent = 'Generando...';
-      btnSpinner.classList.remove('hidden');
+  if (!employeeName) return alert('Ingresa el nombre del colaborador.');
+  if (!situationText) return alert('Describe la situación.');
 
-      document.getElementById('stepsBar').classList.remove('hidden');
-      document.getElementById('cedarOutput').innerHTML = '';
-      document.getElementById('finalOutput').innerHTML = '';
-      document.getElementById('resetBtn').classList.add('hidden');
+  const btn = document.getElementById('startBtn');
+  btn.disabled = true;
+  document.getElementById('startText').textContent = 'Generando feedback...';
+  document.getElementById('startSpinner').classList.remove('hidden');
 
-      // Reset indicators
-      STEP_META.forEach(s => {
-        document.getElementById('ind-' + s.key).className = 'step-indicator';
-      });
+  try {
+    const resp = await fetch('/api/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: employeeName, situation: situationText }),
+    });
 
-      try {
-        const response = await fetch('/api/generate', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, situation }),
-        });
-
-        if (!response.ok) {
-          const errData = await response.json().catch(() => ({}));
-          throw new Error(errData.error || 'Error del servidor');
-        }
-
-        const data = await response.json();
-        const steps = data.steps; // { c, e, d, a, r }
-        const finalMessage = data.finalMessage;
-
-        // Reveal steps one by one with delay
-        for (let i = 0; i < STEP_META.length; i++) {
-          const meta = STEP_META[i];
-          const content = steps[meta.key] || '';
-
-          // Mark indicator active
-          document.getElementById('ind-' + meta.key).classList.add('active');
-
-          // Create step card
-          const card = document.createElement('div');
-          card.className = `cedar-step ${meta.className}`;
-          card.innerHTML = `
-            <div class="step-label">${meta.label}</div>
-            <div class="step-content">${escapeHtml(content)}</div>
-          `;
-          document.getElementById('cedarOutput').appendChild(card);
-
-          // Wait for visual effect
-          await delay(600);
-
-          // Mark indicator done
-          document.getElementById('ind-' + meta.key).classList.remove('active');
-          document.getElementById('ind-' + meta.key).classList.add('done');
-        }
-
-        // Show final combined message
-        await delay(400);
-        const finalDiv = document.createElement('div');
-        finalDiv.className = 'final-card';
-        finalDiv.innerHTML = `
-          <h3>📋 Mensaje final para ${escapeHtml(name)}</h3>
-          <div class="final-text">${escapeHtml(finalMessage)}</div>
-          <button class="copy-btn" onclick="copyFinal()">📄 Copiar al portapapeles</button>
-        `;
-        document.getElementById('finalOutput').appendChild(finalDiv);
-
-        document.getElementById('resetBtn').classList.remove('hidden');
-
-      } catch (err) {
-        alert('Error: ' + err.message);
-      } finally {
-        btn.disabled = false;
-        btnText.textContent = 'Generar Feedback CEDAR';
-        btnSpinner.classList.add('hidden');
-      }
+    if (!resp.ok) {
+      const err = await resp.json().catch(() => ({}));
+      throw new Error(err.error || `Error del servidor (${resp.status})`);
     }
 
-    function copyFinal() {
-      const text = document.querySelector('.final-text')?.textContent || '';
-      navigator.clipboard.writeText(text).then(() => {
-        const btn = document.querySelector('.copy-btn');
-        btn.textContent = '✅ Copiado';
-        setTimeout(() => { btn.textContent = '📄 Copiar al portapapeles'; }, 2000);
-      });
-    }
+    const data = await resp.json();
+    cedarSteps = data.steps || {};
+    finalMessage = data.finalMessage || '';
 
-    function resetForm() {
-      document.getElementById('employeeName').value = '';
-      document.getElementById('situation').value = '';
-      document.getElementById('stepsBar').classList.add('hidden');
-      document.getElementById('cedarOutput').innerHTML = '';
-      document.getElementById('finalOutput').innerHTML = '';
-      document.getElementById('resetBtn').classList.add('hidden');
-      STEP_META.forEach(s => {
-        document.getElementById('ind-' + s.key).className = 'step-indicator';
-      });
-    }
+    // Switch views
+    document.getElementById('setupView').classList.add('hidden');
+    document.getElementById('chatView').classList.remove('hidden');
 
-    function escapeHtml(str) {
-      const div = document.createElement('div');
-      div.textContent = str;
-      return div.innerHTML;
-    }
+    // Start first phase
+    currentPhaseIdx = -1;
+    advancePhase();
 
-    function delay(ms) {
-      return new Promise(resolve => setTimeout(resolve, ms));
-    }
-  </script>
+  } catch (err) {
+    alert('Error: ' + err.message);
+    btn.disabled = false;
+    document.getElementById('startText').textContent = 'Iniciar sesión CEDAR';
+    document.getElementById('startSpinner').classList.add('hidden');
+  }
+}
+
+// ===================== ADVANCE =====================
+function advancePhase() {
+  currentPhaseIdx++;
+
+  if (currentPhaseIdx >= PHASES.length) {
+    showFinal();
+    return;
+  }
+
+  const phase = PHASES[currentPhaseIdx];
+
+  // Update chips
+  document.querySelectorAll('.phase-chip').forEach((chip, i) => {
+    chip.classList.remove('active', 'done');
+    if (i < currentPhaseIdx) chip.classList.add('done');
+    if (i === currentPhaseIdx) chip.classList.add('active');
+  });
+
+  // Intro message
+  addMsg('agent', phase.intro(employeeName));
+
+  // After delay, show CEDAR content
+  setTimeout(() => {
+    addMsg('agent', cedarSteps[phase.key] || '', phase);
+
+    // Enable input
+    waitingForInput = true;
+    document.getElementById('userInput').disabled = false;
+    document.getElementById('sendBtn').disabled = false;
+    document.getElementById('userInput').focus();
+    document.getElementById('inputHint').textContent =
+      currentPhaseIdx < PHASES.length - 1
+        ? `Paso ${currentPhaseIdx + 1} de 5 — Responde o comparte tu punto de vista para continuar`
+        : `Paso 5 de 5 — Responde para ver el mensaje final completo`;
+  }, 900);
+}
+
+// ===================== SEND =====================
+function sendResponse() {
+  if (!waitingForInput) return;
+  const textarea = document.getElementById('userInput');
+  const text = textarea.value.trim();
+  if (!text) return;
+
+  waitingForInput = false;
+  addMsg('employee', text);
+  textarea.value = '';
+  textarea.disabled = true;
+  document.getElementById('sendBtn').disabled = true;
+
+  // Mark chip done
+  const chips = document.querySelectorAll('.phase-chip');
+  if (currentPhaseIdx < chips.length) {
+    chips[currentPhaseIdx].classList.remove('active');
+    chips[currentPhaseIdx].classList.add('done');
+  }
+
+  // Typing indicator → next phase
+  showTyping();
+  setTimeout(() => {
+    removeTyping();
+    advancePhase();
+  }, 1200);
+}
+
+// ===================== FINAL =====================
+function showFinal() {
+  document.getElementById('inputBar').classList.add('hidden');
+
+  // All chips done
+  document.querySelectorAll('.phase-chip').forEach(c => {
+    c.classList.remove('active');
+    c.classList.add('done');
+  });
+
+  addMsg('agent', `Hemos completado los 5 pasos de la retroalimentación CEDAR. Aquí tienes el mensaje completo listo para entregar a ${employeeName}:`);
+
+  setTimeout(() => {
+    const chat = document.getElementById('chatArea');
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'final-card-wrapper';
+    wrapper.innerHTML = `
+      <div class="final-card">
+        <h3>Mensaje de retroalimentación completo</h3>
+        <div class="final-text">${esc(finalMessage)}</div>
+        <button class="copy-btn" onclick="copyText()">Copiar al portapapeles</button>
+      </div>
+      <button class="btn-reset" onclick="resetAll()">Nueva sesión de feedback</button>
+    `;
+    chat.appendChild(wrapper);
+    scrollDown();
+  }, 700);
+}
+
+// ===================== HELPERS =====================
+function addMsg(who, text, phase) {
+  const chat = document.getElementById('chatArea');
+  const row = document.createElement('div');
+  row.className = `msg ${who}`;
+
+  const av = document.createElement('div');
+  av.className = 'msg-avatar';
+  av.textContent = who === 'agent' ? 'C' : employeeName.charAt(0).toUpperCase();
+
+  const bubble = document.createElement('div');
+  bubble.className = 'msg-bubble';
+
+  if (phase) {
+    const lbl = document.createElement('div');
+    lbl.className = `msg-label ${phase.css}`;
+    lbl.textContent = phase.label;
+    bubble.appendChild(lbl);
+  }
+
+  const p = document.createElement('div');
+  p.textContent = text;
+  bubble.appendChild(p);
+
+  row.appendChild(av);
+  row.appendChild(bubble);
+  chat.appendChild(row);
+  scrollDown();
+}
+
+function showTyping() {
+  const chat = document.getElementById('chatArea');
+  const row = document.createElement('div');
+  row.className = 'msg agent';
+  row.id = 'typingRow';
+  row.innerHTML = `<div class="msg-avatar">C</div><div class="msg-bubble"><div class="typing"><span></span><span></span><span></span></div></div>`;
+  chat.appendChild(row);
+  scrollDown();
+}
+function removeTyping() {
+  const el = document.getElementById('typingRow');
+  if (el) el.remove();
+}
+
+function scrollDown() {
+  const chat = document.getElementById('chatArea');
+  requestAnimationFrame(() => { chat.scrollTop = chat.scrollHeight; });
+}
+
+function copyText() {
+  navigator.clipboard.writeText(finalMessage).then(() => {
+    const b = document.querySelector('.copy-btn');
+    b.textContent = 'Copiado';
+    setTimeout(() => { b.textContent = 'Copiar al portapapeles'; }, 2000);
+  });
+}
+
+function resetAll() {
+  document.getElementById('chatArea').innerHTML = '';
+  document.getElementById('employeeName').value = '';
+  document.getElementById('situation').value = '';
+  document.getElementById('startBtn').disabled = false;
+  document.getElementById('startText').textContent = 'Iniciar sesión CEDAR';
+  document.getElementById('startSpinner').classList.add('hidden');
+  document.getElementById('chatView').classList.add('hidden');
+  document.getElementById('setupView').classList.remove('hidden');
+  document.getElementById('inputBar').classList.remove('hidden');
+  document.getElementById('userInput').disabled = false;
+  document.getElementById('sendBtn').disabled = true;
+  currentPhaseIdx = -1;
+  cedarSteps = {};
+  finalMessage = '';
+  waitingForInput = false;
+  document.querySelectorAll('.phase-chip').forEach(c => c.classList.remove('active', 'done'));
+}
+
+function esc(s) {
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendResponse();
+  }
+}
+</script>
 </body>
 </html>
